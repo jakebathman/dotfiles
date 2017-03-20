@@ -2,7 +2,7 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-   . /etc/bashrc
+ . /etc/bashrc
 fi
 
 # User specific environment and startup programs
@@ -20,10 +20,9 @@ _vimbash() {
 }
 
 alias redis=redis-cli
-
-alias beanstats='echo -e $BGreen"echo -e \"stats\\\r\\\n\" | nc localhost 11300 | grep -E \"(current|uptime|version)\"\n\n";echo -e "stats\r\n" | nc localhost 11300 | grep -E "(current|uptime|version)"';
-
 alias c='clear'
+
+alias lsa='echo -e $BYellow"ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"$NC\n";ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"'
 
 alias logslaravel=_logslaravel
 _logslaravel() {
@@ -42,9 +41,37 @@ _logslaravel() {
 
 alias taillogs='cd storage/logs/;clear;echo -e $BYellow"tail -F -n 0 /storage/logs/*.log\n"$NC;ls | grep -v laravel.log | grep -v .gz | xargs tail -F -n 0'
 alias tailaccess='clear;echo -e $BYellow"tail -f -n 50 /var/log/nginx/access.log\n"$NC;sudo tail -F -n 50 /var/log/nginx/access.log'
+alias tailphp='tail /var/log/php-fpm/www-error.log  -f'
 
+# Quick git helpers
 alias gs='git status'
-alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress$NC\n";git fetch -v --all -t -p --progress'
+alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"up to date\"$NC\n";git fetch -v --all -t -p --progress 2>&1 | grep -v "up to date"'
+
+
+alias gpmaster=_gpmaster
+_gpmaster() {
+  echo -e "\n";
+  echo -e $BGreen"     git fetch -v --all -t -p --progress$NC\n";
+  git fetch -v --all -t -p --progress;
+  echo -e "\n-----------------------------\n";
+  echo -e $BGreen"     git checkout master$NC\n";
+  git checkout master;
+  echo -e "\n-----------------------------\n";
+  echo -e $BGreen"     git pull --verbose origin master$NC\n";
+  git pull --verbose origin master;
+  echo -e "\n-----------------------------\n";
+  echo -e $BBlue"     composer dump-autoload$NC\n";
+  composer dump-autoload;
+  echo -e "\n";
+}
+alias gitcheck=_gitcheck
+_gitcheck() {
+  echo -e $Cyan"git checkout -b $1 origin/$1"$NC;
+  git checkout -b "$1" origin/"$1";
+}
+alias beanstats='echo -e $BGreen"echo -e "stats\r\n" | nc localhost 11300 | grep -E \"(current|uptime|version)\"\n\n";echo -e "stats\r\n" | nc localhost 11300 | grep -E "(current|uptime|version)"';
+
+
 
 _gpull() { git pull origin "$1"; }
 alias gpull=_gpull
@@ -96,6 +123,12 @@ On_White='\e[47m'       # White
 NC="\e[m"               # Color Reset
 
 
-PS1="\[\e[1;97m\][\[\e[0;37m\]\u\[\e[1;97m\] \W]\$\[\e[0m\] "
-#PS1="[\u \W]\$ "
+PS1='[\d \t \h]$ '
+if [ $(id -u) -eq 0 ];
+then # you are root, set red colour prompt
+  PS1="\[\e[37m\][\[\e[91m\]\\u\[\e[37m\]@\[\e[96m\]\\h\[\e[37m\] \\w]\[\e[91m\]# \\[$(tput sgr0)\\]"
+else # normal
+  PS1="[\\u@\\h:\\w]$ "
+fi
+
 clear;
