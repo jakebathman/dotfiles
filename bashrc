@@ -14,7 +14,7 @@ export PATH
 # Aliases
 #----------------------------------------------------
 
-alias cdapp=/usr/share/nginx/html;
+alias cdapp='cd /usr/share/nginx/html';
 
 alias vbash=_vimbash
 _vimbash() {
