@@ -1,6 +1,6 @@
 On a new server, run the following command inside `~`:
 
-##SSH Key
+## SSH Key
 If needed, generate a new SSH key and add to GitHub settings:
 1. `ssh-keygen`
 2. `ssh-agent`
