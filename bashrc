@@ -137,7 +137,7 @@ if [ $(id -u) -eq 0 ];
 then # you are root, set red colour prompt
   PS1="\[\e[37m\][\[\e[91m\]\\u\[\e[37m\]@\[\e[96m\]\\h\[\e[37m\] \\w]\[\e[91m\]# \\[$(tput sgr0)\\]"
 else # normal
-  PS1="[\\u@\\h:\\w]$ "
+  PS1="\[\e[1;97m\][\[\e[0;37m\]\u\[\e[1;97m\] \W]\$\[\e[0m\] "
 fi
 
 clear;
