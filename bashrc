@@ -48,6 +48,7 @@ alias tailphp='tail /var/log/php-fpm/www-error.log  -f'
 # Quick git helpers
 alias gs='git status'
 alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"up to date\"$NC\n";git fetch -v --all -t -p --progress 2>&1 | grep -v "up to date"'
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 
 alias gpmaster=_gpmaster
