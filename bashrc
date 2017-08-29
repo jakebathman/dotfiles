@@ -2,7 +2,7 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
- . /etc/bashrc
+  . /etc/bashrc
 fi
 
 # User specific environment and startup programs
@@ -14,7 +14,9 @@ export PATH
 # Aliases
 #----------------------------------------------------
 
-alias cdapp='cd /usr/share/nginx/html';
+app_dir='/usr/share/nginx/html/';
+
+alias cdapp='cd ${app_dir}';
 
 alias vbash=_vimbash
 _vimbash() {
@@ -28,16 +30,49 @@ alias lsa='echo -e $BYellow"ls -lsAh --color --file-type --group-directories-fir
 
 alias logslaravel=_logslaravel
 _logslaravel() {
+  # see if we're in a laravel project root right now
+  if [ -d "storage" ]; then
+    project_root="$(pwd)"
+    echo "root: $project_root"
+  else
+    current_pwd="$(pwd)"
+    proj="${app_dir}"
+
+    # check that the current directory is the root of a project
+    if [[ $current_pwd != *"$proj"* ]]; then
+      cd "$proj"
+    fi
+
+
+    let i=0 # define counting variable
+    W=() # define working array
+    while read -r line; do # process file by file
+      let i=$i+1
+      if [ -d "${proj}${line}storage/logs" ]; then
+        W+=($i "$line")
+      fi
+    done < <( ls -1 -d */ )
+    FILE=$(dialog --title "List file of directory /home" --menu "Chose one" 24 80 17 "${W[@]}" 3>&2 2>&1 1>&3) # show dialog and store output
+
+    if [ $? -eq 0 ]; then # Exit with OK
+      theproject=$(ls -1d */ | sed -n "`echo "$FILE p" | sed 's/ //'`")
+    else
+      echo "no directories :("
+    fi
+    project_root="${proj}${theproject}";
+  fi
+
   clear;
   echo -e $BYellow"tail -f -n 150 laravel.log\n"$NC;
   if [ "$1" = "-f" ]; then
     # Filter out the stack trace lines (easier to read)
     echo "Filtering using:\n";
     echo -e $BYellow"grep -i -P \"^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next exception\" --color\n"$NC;
-    tail -f -n 450 storage/logs/laravel.log | grep -i -P "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next exception" --color
+    tail -f -n 450 "$project_root"storage/logs/laravel.log | grep -i -P "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:" --color
   else
-    tail -f -n 150 storage/logs/laravel.log | grep -i -P "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next exception|$" --color
+    tail -f -n 150 "$project_root"storage/logs/laravel.log | grep -i -P "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:|$" --color
   fi
+
 }
 
 # Fix permissions in a laravel 5.x project
@@ -100,8 +135,8 @@ alias sb='source ~/.bash_profile'
 
 # Allow the user to set the title.
 function title {
-  PROMPT_COMMAND="echo -ne \"\033]0;$1 [$USER]\007\"";
-  clear;
+PROMPT_COMMAND="echo -ne \"\033]0;$1 [$USER]\007\"";
+clear;
 }
 
 alias cdump='composer dump-autoload'
