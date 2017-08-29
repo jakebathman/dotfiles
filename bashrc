@@ -40,6 +40,23 @@ _logslaravel() {
   fi
 }
 
+# Fix permissions in a laravel 5.x project
+alias permlar=_permlar
+_permlar(){
+  # Make sure /storage exists
+  if [ -d "storage" ]; then
+    owner="$(stat -c %U .)" # get the directory owner name
+    sudo chmod -Rf 777 storage
+    sudo chown -Rf "$owner:$owner" storage
+  fi
+
+  # Make sure /bootstrap exists
+  if [ -d "bootstrap" ]; then
+    owner="$(stat -c %U .)" # get the directory owner name
+    sudo chmod -Rf 777 bootstrap
+    sudo chown -Rf "$owner:$owner" bootstrap
+  fi
+}
 
 alias taillogs='cd storage/logs/;clear;echo -e $BYellow"tail -F -n 0 /storage/logs/*.log\n"$NC;ls | grep -v laravel.log | grep -v .gz | xargs tail -F -n 0'
 alias tailaccess='clear;echo -e $BYellow"tail -f -n 50 /var/log/nginx/access.log\n"$NC;sudo tail -F -n 50 /var/log/nginx/access.log'
@@ -139,6 +156,11 @@ then # you are root, set red colour prompt
   PS1="\[\e[37m\][\[\e[91m\]\\u\[\e[37m\]@\[\e[96m\]\\h\[\e[37m\] \\w]\[\e[91m\]# \\[$(tput sgr0)\\]"
 else # normal
   PS1="\[\e[1;97m\][\[\e[0;37m\]\u\[\e[1;97m\] \W]\$\[\e[0m\] "
+fi
+
+# Source any machine-specific stuff from ~/.bash_aliases
+if [ -f ~/.bash_aliases ]; then
+ . ~/.bash_aliases
 fi
 
 clear;
