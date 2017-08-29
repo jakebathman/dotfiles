@@ -32,7 +32,7 @@ alias logslaravel=_logslaravel
 _logslaravel() {
   # see if we're in a laravel project root right now
   if [ -d "storage" ]; then
-    project_root="$(pwd)"
+    project_root="$(pwd)/"
     echo "root: $project_root"
   else
     current_pwd="$(pwd)"
@@ -101,7 +101,7 @@ alias tailphp='tail /var/log/php-fpm/www-error.log  -f'
 alias gs='git status'
 alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"up to date\"$NC\n";git fetch -v --all -t -p --progress 2>&1 | grep -v "up to date"'
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
+alias gd='echo -e $BGreen"git diff --color=always\n\n"$NC;git diff --color=always'
 
 alias gpmaster=_gpmaster
 _gpmaster() {
