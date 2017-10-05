@@ -15,5 +15,8 @@ If needed, generate a new SSH key and add to GitHub settings:
 ## "Install" the dotfiles
 `cd ~/dotfiles && git pull && chmod +x ./installDotFiles.sh && ./installDotFiles.sh && source ~/.bashrc`
 
+## Required dependencies
+`logslaravel` requires `dialog`: `yum install dialog -y`
+
 ## All done
 Go have fun
