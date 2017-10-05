@@ -26,6 +26,8 @@ _vimbash() {
 alias redis=redis-cli
 alias c='clear'
 
+alias phpunit="./vendor/bin/phpunit"
+
 alias lsa='echo -e $BYellow"ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"$NC\n";ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"'
 
 alias logslaravel=_logslaravel
