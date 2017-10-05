@@ -14,7 +14,7 @@ export PATH
 # Aliases
 #----------------------------------------------------
 
-app_dir='/usr/share/nginx/html/';
+app_dir='/home/vagrant/axxess/cahps/';
 
 alias cdapp='cd ${app_dir}';
 
@@ -43,12 +43,14 @@ _logslaravel() {
       cd "$proj"
     fi
 
-
     let i=0 # define counting variable
     W=() # define working array
     while read -r line; do # process file by file
       let i=$i+1
       if [ -d "${proj}${line}storage/logs" ]; then
+        W+=($i "$line")
+      fi
+      if [ -d "${proj}${line}app/storage/logs" ]; then
         W+=($i "$line")
       fi
     done < <( ls -1 -d */ )
@@ -61,7 +63,11 @@ _logslaravel() {
     fi
     project_root="${proj}${theproject}";
   fi
-
+  
+  # make sure the log file is in the place we expect (might not be, due to laravel 4/5 diffs)
+  if [ -d "${project_root}app/storage/logs" ]; then
+    project_root="${project_root}app/";
+  fi
   clear;
   echo -e $BYellow"tail -f -n 150 laravel.log\n"$NC;
   if [ "$1" = "-f" ]; then
@@ -74,7 +80,6 @@ _logslaravel() {
   fi
 
 }
-
 # Fix permissions in a laravel 5.x project
 alias permlar=_permlar
 _permlar(){
@@ -195,7 +200,7 @@ fi
 
 # Source any machine-specific stuff from ~/.bash_aliases
 if [ -f ~/.bash_aliases ]; then
- . ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
 clear;
