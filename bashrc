@@ -14,8 +14,6 @@ export PATH
 # Aliases
 #----------------------------------------------------
 
-app_dir='/home/vagrant/axxess/cahps/';
-
 alias cdapp='cd ${app_dir}';
 
 alias vbash=_vimbash
@@ -35,13 +33,14 @@ _logslaravel() {
   # see if we're in a laravel project root right now
   if [ -d "storage" ]; then
     project_root="$(pwd)/"
-    echo "root: $project_root"
+  elif [ -d "app/storage" ]; then
+    project_root="$(pwd)/"
   else
     current_pwd="$(pwd)"
     proj="${app_dir}"
 
     # check that the current directory is the root of a project
-    if [[ $current_pwd != *"$proj"* ]]; then
+    if [[ $current_pwd != *"$proj" ]]; then
       cd "$proj"
     fi
 
