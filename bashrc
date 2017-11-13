@@ -24,6 +24,13 @@ _vimbash() {
 alias redis=redis-cli
 alias c='clear'
 
+# Copy & vim the new file
+alias cpvim=_cpvim
+_cpvim() {
+  cp "$1" "$2"
+  vim "$2"
+}
+
 alias phpunit="./vendor/bin/phpunit"
 
 alias lsa='echo -e $BYellow"ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"$NC\n";ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"'
