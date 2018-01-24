@@ -1,0 +1,9 @@
+# .bash_macos
+
+# These are macOS specific modifications that need to be made to the bashrc stuff
+alias ls='gls'
+
+# Enable color in macOS terminal
+export CLICOLOR=1
+# Better colors for ls command
+export LSCOLORS=GxFxCxDxBxegedabagaced
