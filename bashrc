@@ -25,10 +25,15 @@ alias redis=redis-cli
 alias c='clear'
 
 # Copy & vim the new file
-alias cpvim=_cpvim
-_cpvim() {
+cpvim() {
   cp "$1" "$2"
   vim "$2"
+}
+
+# Make directory and cd into it
+mkcd() {
+  mkdir "$1"
+  cd "$1"
 }
 
 alias phpunit="./vendor/bin/phpunit"

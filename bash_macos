@@ -3,7 +3,14 @@
 # These are macOS specific modifications that need to be made to the bashrc stuff
 alias ls='gls'
 
+# Local directories
+alias sites='cd ~/Sites'
+
 # Enable color in macOS terminal
 export CLICOLOR=1
 # Better colors for ls command
 export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# nvm setup stuff
+export NVM_DIR="$HOME/.nvm"
+. "/usr/local/opt/nvm/nvm.sh"
