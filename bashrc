@@ -76,7 +76,7 @@ _logslaravel() {
     fi
     project_root="${proj}${theproject}";
   fi
-  
+
   # make sure the log file is in the place we expect (might not be, due to laravel 4/5 diffs)
   if [ -d "${project_root}app/storage/logs" ]; then
     project_root="${project_root}app/";
@@ -112,7 +112,6 @@ _permlar(){
 }
 
 alias taillogs='cd storage/logs/;clear;echo -e $BYellow"tail -F -n 0 /storage/logs/*.log\n"$NC;ls | grep -v laravel.log | grep -v .gz | xargs tail -F -n 0'
-alias tailaccess='clear;echo -e $BYellow"tail -f -n 50 /var/log/nginx/access.log\n"$NC;sudo tail -F -n 50 /var/log/nginx/access.log'
 alias tailphp='tail /var/log/php-fpm/www-error.log  -f'
 
 # Quick git helpers
@@ -121,8 +120,7 @@ alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"u
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gd='echo -e $BGreen"git diff --color=always\n\n"$NC;git diff --color=always'
 
-alias gpmaster=_gpmaster
-_gpmaster() {
+gpmaster() {
   echo -e "\n";
   echo -e $BGreen"     git fetch -v --all -t -p --progress$NC\n";
   git fetch -v --all -t -p --progress;
@@ -137,30 +135,27 @@ _gpmaster() {
   composer dump-autoload;
   echo -e "\n";
 }
-alias gitcheck=_gitcheck
-_gitcheck() {
+
+gitcheck() {
   echo -e $Cyan"git checkout -b $1 origin/$1"$NC;
   git checkout -b "$1" origin/"$1";
 }
+
+gpull() { git pull origin "$1"; }
+
 alias beanstats='echo -e $BGreen"echo -e "stats\r\n" | nc localhost 11300 | grep -E \"(current|uptime|version)\"\n\n";echo -e "stats\r\n" | nc localhost 11300 | grep -E "(current|uptime|version)"';
-
-
-
-_gpull() { git pull origin "$1"; }
-alias gpull=_gpull
 
 alias sb='source ~/.bash_profile'
 
 # Allow the user to set the title.
 function title {
-PROMPT_COMMAND="echo -ne \"\033]0;$1 [$USER]\007\"";
-clear;
+  PROMPT_COMMAND="echo -ne \"\033]0;$1 [$USER]\007\"";
+  clear;
 }
 
 alias cdump='composer dump-autoload'
 
-_untar() { tar -xvzf "$1"; }
-alias untar=_untar
+untar() { tar -xvzf "$1"; }
 
 # Parse the ifconfig return for IPs (IPv4 and IPv6) and display them nicely according to adapter
 # Yes, it's overkill. 
@@ -202,6 +197,38 @@ On_White='\e[47m'       # White
 
 NC="\e[m"               # Color Reset
 
+colorcodes() {
+  T='=^-^='
+
+  echo -e "\n  normal bg         40m       41m       42m       43m       44m       45m       46m       47m";
+  echo -e "    bold bg        100m      101m      102m      103m      104m      105m      106m      107m";
+
+  for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m'  '1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' '  36m' '1;36m' '  37m' '1;37m';
+  do 
+    FG=${FGs// /}
+    echo -en " $FGs \033[$FG  $T  "
+    for BG in 40m 41m 42m 43m 44m 45m 46m 47m;
+    do 
+      echo -en "$EINS \033[$FG\033[$BG  $T  \033[0m";
+    done
+    echo;
+  done
+echo
+
+echo -e "\n\033[30m\033[107mExample use:\033[0m\n"
+echo "     escape prefix    \\033["
+echo "   white bold text    .    1;37m"
+echo "     escape prefix    .    .    \\033["
+echo "magenta background    .    .    .    45m"
+echo "              text    .    .    .    .   white on magenta"
+echo "     escape prefix    .    .    .    .   .                \\033["
+echo "  clear formatting    .    .    .    .   .                .    0m"
+echo "                      .    .    .    .   .                .    ."
+echo "      full command    \\033[1;37m\\033[45m white on magenta \\033[0m"
+echo -e "         result                         \033[1;37m\033[45m white on magenta \033[0m"
+
+}
+
 
 PS1='[\d \t \h]$ '
 if [ $(id -u) -eq 0 ];
@@ -213,25 +240,25 @@ fi
 
 # Source OS specific revisions
 if [ "$(uname)" == "Darwin" ]; then
-    # macOS
-    if [ -f ~/.bash_macos ]; then
-      . ~/.bash_macos
-    fi
+  # macOS
+  if [ -f ~/.bash_macos ]; then
+    . ~/.bash_macos
+  fi
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    # linux
-    if [ -f ~/.bash_linux ]; then
-      . ~/.bash_linux
-    fi
+  # linux
+  if [ -f ~/.bash_linux ]; then
+    . ~/.bash_linux
+  fi
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
-    # Windows (32 bit)
-    if [ -f ~/.bash_win32 ]; then
-      . ~/.bash_win32
-    fi
+  # Windows (32 bit)
+  if [ -f ~/.bash_win32 ]; then
+    . ~/.bash_win32
+  fi
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
-   # Windows (64 bit)
-    if [ -f ~/.bash_win64 ]; then
-      . ~/.bash_win64
-    fi
+  # Windows (64 bit)
+  if [ -f ~/.bash_win64 ]; then
+    . ~/.bash_win64
+  fi
 fi
 
 
@@ -240,7 +267,7 @@ if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
 
-clear;
-
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+clear;
