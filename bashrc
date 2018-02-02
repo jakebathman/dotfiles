@@ -185,7 +185,7 @@ BPurple='\033[1;95m'      # Purple
 BCyan='\033[1;96m'        # Cyan
 BWhite='\033[1;97m'       # White
 
-# Background
+# Background 
 On_Black='\033[40m'       # Black
 On_Red='\033[41m'         # Red
 On_Green='\033[42m'       # Green
@@ -195,40 +195,61 @@ On_Purple='\033[45m'      # Purple
 On_Cyan='\033[46m'        # Cyan
 On_White='\033[47m'       # White
 
+# Background Bold
+On_BBlack='\033[100m'       # Black
+On_BRed='\033[101m'         # Red
+On_BGreen='\033[102m'       # Green
+On_BYellow='\033[103m'      # Yellow
+On_BBlue='\033[104m'        # Blue
+On_BPurple='\033[105m'      # Purple
+On_BCyan='\033[106m'        # Cyan
+On_BWhite='\033[107m'       # White
+
 NC="\033[m"               # Color Reset
 
 colorcodes() {
   T='=^-^='
 
-  echo -e "\n  normal bg         40m       41m       42m       43m       44m       45m       46m       47m";
-  echo -e "    bold bg        100m      101m      102m      103m      104m      105m      106m      107m";
+  echo -e "\n Normal BG          \033[1;37m\033[40m40m\033[1;0m       \033[0;30m\033[41m41m\033[1;0m       \033[0;30m\033[42m42m\033[1;0m       \033[0;30m\033[43m43m\033[1;0m       \033[0;30m\033[44m44m\033[1;0m       \033[0;30m\033[45m45m\033[1;0m       \033[0;30m\033[46m46m\033[1;0m       \033[0;30m\033[47m47m\033[1;0m";
 
   for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m'  '1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' '  36m' '1;36m' '  37m' '1;37m';
-  do 
+  do
     FG=${FGs// /}
     echo -en " $FGs \033[$FG  $T  "
     for BG in 40m 41m 42m 43m 44m 45m 46m 47m;
-    do 
-      echo -en "$EINS \033[$FG\033[$BG  $T  \033[0m";
+    do
+      echo -en "$EINS \033[$FG\033[$BG  $T  \033[m";
     done
     echo;
   done
-echo
 
-echo -e "\n\033[30m\033[107mExample use:\033[0m\n"
-echo "     escape prefix    \\033["
-echo "   white bold text    .    1;37m"
-echo "     escape prefix    .    .    \\033["
-echo "magenta background    .    .    .    45m"
-echo "              text    .    .    .    .   white on magenta"
-echo "     escape prefix    .    .    .    .   .                \\033["
-echo "  clear formatting    .    .    .    .   .                .    0m"
-echo "                      .    .    .    .   .                .    ."
-echo "      full command    \\033[1;37m\\033[45m white on magenta \\033[0m"
-echo -e "         result                         \033[1;37m\033[45m white on magenta \033[0m"
+  echo -e "\n High Intensity BG  \033[1;37m\033[100m100m\033[1;0m      \033[0;30m\033[101m101m\033[1;0m     \033[0;30m\033[102m102m\033[1;0m      \033[0;30m\033[103m103m\033[1;0m      \033[0;30m\033[104m104m\033[1;0m      \033[0;30m\033[105m105m\033[1;0m      \033[0;30m\033[106m106m\033[1;0m      \033[0;30m\033[107m107m\033[1;0m";
+
+  for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m'  '1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' '  36m' '1;36m' '  37m' '1;37m';
+  do
+    FG=${FGs// /}
+    echo -en " $FGs \033[$FG  $T  "
+    for BG in 100m 101m 102m 103m 104m 105m 106m 107m;
+    do
+      echo -en "$EINS \033[$FG\033[$BG  $T  \033[m";
+    done
+    echo;
+  done
+  echo
+
+  echo -e "\n\033[30m\033[107mExample use:\033[m\n"
+  echo "     escape prefix    \\033["
+  echo "   white bold text    .    1;37m"
+  echo "     escape prefix    .    .    \\033["
+  echo "magenta background    .    .    .    45m"
+  echo "              text    .    .    .    .   white on magenta"
+  echo "     escape prefix    .    .    .    .   .                \\033["
+  echo "  clear formatting    .    .    .    .   .                .    m"
+  echo "                      .    .    .    .   .                .    ."
+  echo "      full command    \\033[1;37m\\033[45m white on magenta \\033[m"
+  echo -e "            result                      \033[1;37m\033[45m white on magenta \033[m"
 
 }
-
 
 PS1='[\d \t \h]$ '
 if [ $(id -u) -eq 0 ];
