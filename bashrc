@@ -166,36 +166,36 @@ alias myip='ifconfig | grep -o --color=always -P "(^([A-Za-z0-9]+)\:?)|(inet|ine
 
 
 # Normal Colors
-Black='\e[0;30m'        # Black
-Red='\e[0;31m'          # Red
-Green='\e[0;32m'        # Green
-Yellow='\e[0;33m'       # Yellow
-Blue='\e[0;34m'         # Blue
-Purple='\e[0;35m'       # Purple
-Cyan='\e[0;36m'         # Cyan
-White='\e[0;37m'        # White
+Black='\033[0;30m'        # Black
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+Blue='\033[0;34m'         # Blue
+Purple='\033[0;35m'       # Purple
+Cyan='\033[0;36m'         # Cyan
+White='\033[0;37m'        # White
 
 # Bold
-BBlack='\e[1;90m'       # Black
-BRed='\e[1;91m'         # Red
-BGreen='\e[1;92m'       # Green
-BYellow='\e[1;93m'      # Yellow
-BBlue='\e[1;94m'        # Blue
-BPurple='\e[1;95m'      # Purple
-BCyan='\e[1;96m'        # Cyan
-BWhite='\e[1;97m'       # White
+BBlack='\033[1;90m'       # Black
+BRed='\033[1;91m'         # Red
+BGreen='\033[1;92m'       # Green
+BYellow='\033[1;93m'      # Yellow
+BBlue='\033[1;94m'        # Blue
+BPurple='\033[1;95m'      # Purple
+BCyan='\033[1;96m'        # Cyan
+BWhite='\033[1;97m'       # White
 
 # Background
-On_Black='\e[40m'       # Black
-On_Red='\e[41m'         # Red
-On_Green='\e[42m'       # Green
-On_Yellow='\e[43m'      # Yellow
-On_Blue='\e[44m'        # Blue
-On_Purple='\e[45m'      # Purple
-On_Cyan='\e[46m'        # Cyan
-On_White='\e[47m'       # White
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
 
-NC="\e[m"               # Color Reset
+NC="\033[m"               # Color Reset
 
 colorcodes() {
   T='=^-^='
@@ -233,9 +233,9 @@ echo -e "         result                         \033[1;37m\033[45m white on mag
 PS1='[\d \t \h]$ '
 if [ $(id -u) -eq 0 ];
 then # you are root, set red colour prompt
-  PS1="\[\e[37m\][\[\e[91m\]\\u\[\e[37m\]@\[\e[96m\]\\h\[\e[37m\] \\w]\[\e[91m\]# \\[$(tput sgr0)\\]"
+  PS1="\[\033[37m\][\[\033[91m\]\\u\[\033[37m\]@\[\033[96m\]\\h\[\033[37m\] \\w]\[\033[91m\]# \\[$(tput sgr0)\\]"
 else # normal
-  PS1="\[\e[1;97m\][\[\e[0;37m\]\u\[\e[1;97m\] \W]\$\[\e[0m\] "
+  PS1="\[\033[1;97m\][\[\033[0;37m\]\u\[\033[1;97m\] \W]\$\[\033[0m\] "
 fi
 
 # Source OS specific revisions
