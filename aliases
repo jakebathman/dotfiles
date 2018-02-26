@@ -9,6 +9,8 @@ export PATH
 
 alias cdapp='cd ${app_dir}';
 
+alias tm='tmux -2 attach || tmux -2'
+
 alias va='vim ~/.aliases'
 
 alias drink='gulp;open -a firefox;'
