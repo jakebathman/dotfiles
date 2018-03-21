@@ -219,16 +219,16 @@ colorcodes() {
   echo
 
   echo -e "\n\033[30m\033[107mExample use:\033[m\n"
-  echo "     escape prefix    \\033["
-  echo "   white bold text    .    1;37m"
-  echo "     escape prefix    .    .    \\033["
-  echo "magenta background    .    .    .    45m"
-  echo "              text    .    .    .    .   white on magenta"
-  echo "     escape prefix    .    .    .    .   .                \\033["
-  echo "  clear formatting    .    .    .    .   .                .    m"
-  echo "                      .    .    .    .   .                .    ."
-  echo "      full command    \\033[1;37m\\033[45m white on magenta \\033[m"
-  echo -e "            result                      \033[1;37m\033[45m white on magenta \033[m"
+  echo '      escape prefix    \033['
+  echo '    white bold text    .    1;37m'
+  echo '      escape prefix    .    .    \033['
+  echo ' magenta background    .    .    .    45m'
+  echo '               text    .    .    .    .   white on magenta'
+  echo '      escape prefix    .    .    .    .   .                \033['
+  echo '   clear formatting    .    .    .    .   .                .    m'
+  echo '                       .    .    .    .   .                .    .'
+  echo '       full command    \033[1;37m\033[45m white on magenta \033[m'
+  echo -e "             result                      \033[1;37m\033[45m white on magenta \033[m"
 
 }
 
