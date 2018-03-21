@@ -2,6 +2,11 @@
 
 # These are macOS specific modifications that need to be made to the bashrc stuff
 alias ls='gls'
+alias gls='_lsa'
+_lsa(){
+  echo -e $BYellow"gls -lsAh --color --file-type --group-directories-first --time-style=+\"%Y-%m-%d %T\"$NC\n"
+  \gls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"
+}
 
 # Local directories
 alias sites='cd ~/Sites'
@@ -14,6 +19,100 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # nvm setup stuff
 export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"
+#. "/usr/local/opt/nvm/nvm.sh" # this was commented out on 3/21/2018 because of performance issues, and replaced with the function below
+# This loads nvm
+export NVM_DIR=~/.nvm
+function nvm {
+  if [ -s "$NVM_DIR/nvm.sh" ]; then 
+    . "$NVM_DIR/nvm.sh"
+    nvm use system
+    nvm $@
+  fi
+}
+
 
 alias geneup="~/Sites/scripts/gene_up.sh"
+
+# Send system notificaction
+notify(){
+
+usage="$(basename $0) -m \"message\" [-t \"title\"] [-s \"subtitle\"] [-n \"noise\"] ...
+
+Send a system notification. Only message is required.
+
+-g  Group of messages (defaults to title if not provided)
+-i  Icon path (absolute)
+-m  Message of the notification (body)
+-n  System sound to use (Basso,Blow,Bottle,Frog,Funk,Glass,Hero,Morse,Ping,Pop,Purr,Sosumi,Submarine,Tink)
+-o  Open an application when message is clicked (e.g. -a 'com.apple.AddressBook')
+-s  Subtitle
+-t  Title
+-u  Open a URL when message is clicked (e.g. -u "http://twitter.com")
+
+Example:
+
+notify -m \"Something has happened!\" -t \"Hmmm\" -s \"...\" -n \"Glass\""
+
+MESSAGE=""
+TITLE="Alert"
+SUBTITLE=" "
+NOISE="default"
+ICON="~/Documents/meow.png"
+GROUP=""
+OPENAPP=""
+OPENURL=""
+SENDER="meow.meow"
+EXECUTE=""
+
+while getopts e:g:hi:m:n:o:s:t:u:z: option
+do
+  case "${option}" in
+    e) EXECUTE="${OPTARG}";;
+    g) GROUP="${OPTARG}";;
+    h) echo -e "$usage"
+      return;;
+    i) ICON="${OPTARG}";;
+    m) MESSAGE="${OPTARG}";;
+    n) NOISE="${OPTARG}";;
+    o) OPENAPP="${OPTARG}";;
+    s) SUBTITLE="${OPTARG}";;
+    t) TITLE="${OPTARG}";;
+    u) OPENURL="${OPTARG}";;
+    z) SENDER="${OPTARG}";;
+    \?) echo -e "unknown option: -%s\n" "$OPTARG" >&2
+      return;;
+  esac
+done
+
+if [[ -z "$MESSAGE" ]]; then
+  if [[ -z "$1" ]]; then
+    echo "Missing the message!"
+    echo -e "\n"
+    echo -e "$usage"
+    return
+  else
+    MESSAGE="$1"
+  fi
+fi
+
+if [[ -z "$GROUP" ]]; then
+  GROUP="$TITLE"
+fi
+
+# Send the message
+SCRIPT="terminal-notifier -message \"${MESSAGE}\" -title \"${TITLE}\" -subtitle \"${SUBTITLE}\" -sound \"${NOISE}\" -group \"${GROUP}\" -sender \"${SENDER}\""
+if [[ -n "$ICON" ]]; then
+  SCRIPT="$SCRIPT -appIcon \"${ICON}\""
+fi
+if [[ -n "$OPENAPP" ]]; then
+  SCRIPT="$SCRIPT -activate \"${OPENAPP}\""
+fi
+if [[ -n "$OPENURL" ]]; then
+  SCRIPT="$SCRIPT -open \"${OPENURL}\""
+fi
+if [[ -n "$EXECUTE" ]]; then
+  SCRIPT="$SCRIPT -execute \"${EXECUTE}\""
+fi
+#echo "$SCRIPT"
+eval $SCRIPT
+}

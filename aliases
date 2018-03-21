@@ -11,7 +11,13 @@ alias cdapp='cd ${app_dir}';
 
 alias va='vim ~/.aliases'
 
-alias drink='gulp;open -a firefox;'
+alias drink='gulp;notify -m "Gulp task complete!" -t "Gulp" -n Frog;'
+
+# Placeholder notification function
+# Should be overridden on each platform
+notify() {
+  echo "$1" "$2" "$3"
+}
 
 alias vbash='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
@@ -36,7 +42,12 @@ mkcd() {
 
 alias phpunit="./vendor/bin/phpunit"
 
-alias lsa='echo -e $BYellow"ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"$NC\n";ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"'
+alias lsa=_lsa
+alias ls=_lsa
+_lsa(){
+  echo -e $BYellow"ls -lsAh --color --file-type --group-directories-first --time-style=+\"%Y-%m-%d %T\"$NC\n"
+  \ls -lsAh --color --file-type --group-directories-first --time-style=+"%Y-%m-%d %T"
+}
 
 alias logslaravel=_logslaravel
 _logslaravel() {
@@ -80,14 +91,14 @@ _logslaravel() {
     project_root="${project_root}app/";
   fi
   clear;
-  echo -e $BYellow"tail -f -n 150 laravel.log\n"$NC;
+  echo -e $BYellow"tail -f -n 150 laravel*.log\n"$NC;
   if [ "$1" = "-f" ]; then
     # Filter out the stack trace lines (easier to read)
     echo "Filtering using:\n";
-    echo -e $BYellow"grep -i -P \"^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next exception\" --color\n"$NC;
-    tail -f -n 450 "$project_root"storage/logs/laravel.log | grep -i -P "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:" --color
+    echo -e $BYellow"grep -i -E \"^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next exception\" --color\n"$NC;
+    tail -f -n 450 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:" --color
   else
-    tail -f -n 150 "$project_root"storage/logs/laravel.log | grep -i -P "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:|$" --color
+    tail -f -n 150 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\]|Next [\w\W]+?\:|$" --color
   fi
 
 }
@@ -221,3 +232,28 @@ colorcodes() {
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+
+
+# Source OS specific revisions
+if [ "$(uname)" = "Darwin" ]; then
+  # macOS
+  if [ -f ~/.bash_macos ]; then
+    . ~/.bash_macos
+  fi
+elif [ "$(expr substr $(uname -s) 1 5)" = "Linux" ]; then
+  # linux
+  if [ -f ~/.bash_linux ]; then
+    . ~/.bash_linux
+  fi
+elif [ "$(expr substr $(uname -s) 1 10)" = "MINGW32_NT" ]; then
+  # Windows (32 bit)
+  if [ -f ~/.bash_win32 ]; then
+    . ~/.bash_win32
+  fi
+elif [ "$(expr substr $(uname -s) 1 10)" = "MINGW64_NT" ]; then
+  # Windows (64 bit)
+  if [ -f ~/.bash_win64 ]; then
+    . ~/.bash_win64
+  fi
+fi
