@@ -116,3 +116,12 @@ fi
 #echo "$SCRIPT"
 eval $SCRIPT
 }
+
+# Restart the bluetooth module (requires blueutil to be installed)
+btreset(){
+  if ! [ -x "$(command -v blueutil)" ]; then
+    brew install blueutil
+  fi
+  blueutil -p off && blueutil -p on && blueutil
+}
+
