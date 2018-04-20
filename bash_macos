@@ -32,6 +32,7 @@ function nvm {
 
 
 alias geneup="~/Sites/scripts/gene_up.sh"
+alias karaniup="~/Sites/scripts/karani_up.sh"
 
 # Send system notificaction
 notify(){

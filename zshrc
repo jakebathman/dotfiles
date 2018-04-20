@@ -72,7 +72,6 @@ plugins=(
   chucknorris
   git-flow
   jsontools
-  lol
   npm
   nyan
   redis-cli
