@@ -1,5 +1,10 @@
 # .aliases
 
+# Import any variables from ~/.variables
+# This should include things like app_dir=/foo/bar
+#   and can be based on ~./dotfiles/variables_default
+source ~/.variables
+
 PATH=$PATH:$HOME/bin:$HOME/.composer/vendor/bin
 export PATH
 
