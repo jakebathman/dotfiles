@@ -172,6 +172,8 @@ SPACESHIP_DIR_PREFIX=""
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+## Change the EOL character when no EOL is used (defaults to inverse %)
+PROMPT_EOL_MARK=""
 
 clear;
 
