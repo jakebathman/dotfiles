@@ -20,6 +20,8 @@ alias va='vim ~/.aliases'
 
 alias drink='gulp;notify -m "Gulp task complete!" -t "Gulp" -n Frog;'
 
+alias dcomp='docker-compose'
+
 # Placeholder notification function
 # Should be overridden on each platform
 notify() {
