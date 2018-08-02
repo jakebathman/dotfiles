@@ -30,6 +30,7 @@ notify() {
 
 alias vbash='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
+alias mfs='php artisan migrate:fresh --seed'
 
 alias vz='vim ~/.zshrc'
 alias sz='source ~/.zshrc'
@@ -50,6 +51,8 @@ mkcd() {
 }
 
 alias phpunit="./vendor/bin/phpunit"
+alias tink="php artisan tinker"
+alias art="php artisan"
 
 alias lsa=_lsa
 alias ls=_lsa
