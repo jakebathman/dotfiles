@@ -122,7 +122,6 @@ alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"u
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gd='echo -e $BGreen"git diff --color=always\n\n"$NC;git diff --color=always'
 alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "geneweaver" | xargs -n 1 git branch -d'
-alias gclone=_gclone()
 
 # sync a fork using the upstream branch 
 gfu(){
