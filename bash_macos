@@ -1,5 +1,8 @@
 # .bash_macos
 
+PATH=$PATH:/usr/local/opt/python/libexec/bin
+export PATH
+
 # These are macOS specific modifications that need to be made to the bashrc stuff
 alias ls='gls'
 alias gls='_lsa'
@@ -11,6 +14,7 @@ _lsa(){
 # Local directories
 alias sites='cd ~/Sites'
 alias scripts='cd ~/Sites/scripts'
+alias p='cd ~/projects'
 
 # Enable color in macOS terminal
 export CLICOLOR=1
