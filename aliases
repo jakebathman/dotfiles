@@ -21,6 +21,8 @@ alias va='vim ~/.aliases'
 alias drink='gulp;notify -m "Gulp task complete!" -t "Gulp" -n Frog;'
 
 alias dcomp='docker-compose'
+alias dcu='docker-compose up -d'
+alias dcd='docker-compose down'
 
 # Force crontab to open using vim
 EDITOR="/usr/bin/vim"

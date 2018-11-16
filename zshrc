@@ -170,6 +170,9 @@ SPACESHIP_DIR_PREFIX=""
 SPACESHIP_GIT_BRANCH_COLOR="081" # blue
 SPACESHIP_DIR_COLOR="208" # orange
 
+# Fix for git directory issue: https://github.com/denysdovhan/spaceship-prompt/issues/343
+SPACESHIP_DIR_TRUNC_REPO=false
+
 # END Spaceship prompt settings
 #############
 
