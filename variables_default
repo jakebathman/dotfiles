@@ -1,3 +1,6 @@
 # .variables
 
 app_dir=/usr/share/nginx/html
+
+# optional
+# PROMPT_TEXT="server1"
