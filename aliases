@@ -135,7 +135,7 @@ _logslaravel() {
     echo -e $BYellow"grep -i -E \"^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next exception\" --color\n"$NC;
     tail -f -n 450 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:" --color
   else
-    tail -f -n 150 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:|$" --color=always | GREP_COLOR="1;36"  grep -iE '((?:\/)([[:alnum:]]+(\.php)?\([[:digit:]]+\)):|$)' --color=always
+    tail -f -n 150 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:||\/([[:alnum:]]+(\.php)?:[[:digit:]]+)$" --color=always | GREP_COLOR="1;36"  grep -iE "(\[internal function\]|\{main\}|\/([[:alnum:]]+(\.php)?\([[:digit:]]+\)):|$)" --color=always
     # tail -f -n 150 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:|$" --color
   fi
 
