@@ -1,6 +1,6 @@
 # .bash_macos
 
-PATH=$PATH:/usr/local/opt/python/libexec/bin
+PATH=$PATH:/usr/local/opt/python/libexec/bin:./vendor/bin:./vendor/phpunit/phpunit/phpunit
 export PATH
 
 # These are macOS specific modifications that need to be made to the bashrc stuff
@@ -133,3 +133,6 @@ btreset(){
   blueutil -p off && blueutil -p on && blueutil
 }
 
+# Open OBS (until they ship a fixed version for Catalina and Stream Deck)
+# Added here Nov 7, 2019
+alias openobs='open /Applications/OBS.app/Contents/MacOS/OBS --args -picture'

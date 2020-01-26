@@ -5,12 +5,92 @@
 #   and can be based on ~./dotfiles/variables_default
 source ~/.variables
 
-PATH=$PATH:$HOME/bin:$HOME/.composer/vendor/bin
+PATH=$PATH:$HOME/bin:$HOME/.composer/vendor/bin:~/Sites/tools/flutter/bin
 export PATH
 
 #-----------------------------------------------------
+# SCRATCH
+#-----------------------------------------------------
+
+function git_add_remote() { 
+
+    RED="\033[1;91m"
+    GREEN="\033[1;92m"
+    YELLOW="\033[1;93m"
+    CYAN="\033[1;96m"
+    NC="\033[m"
+
+    U=""
+    B=""
+    DIR=""
+
+    # usage info for -h flag
+    usage="
+usage: $(basename "$0") ${YELLOW}username:branch-name${NC}
+   or: $(basename "$0") ${CYAN}-u username -b branch-name${NC}
+
+This adds the specified GitHub fork and branch as a remote to the current repo. Specifically, it is a shorthand for these commands:
+
+    ${GREEN}git remote add username-remote git@github.com:username/repo.git
+    git fetch username-remote
+    git checkout -b username-branch-name username/branch-name${NC}
+
+You can pass the username and repo easily by copying it from the top of a pull request, as ${YELLOW}username:branch-name${NC}. 
+You can also pass it using the ${CYAN}-u username${NC} and ${CYAN}-b branch-name${NC} flags
+"
+
+    # set option flag values
+    while getopts hb:u: option
+    do
+        case "${option}" in
+            h) echo -e "$usage"
+            return;;
+            b) B="${OPTARG}";;
+            u) U="${OPTARG}";;
+            :) echo -e "missing argument for -%s\n" "$OPTARG" >&2
+            return;;
+            \?) echo -e "unknown option: -%s\n" "$OPTARG" >&2
+            return;;
+        esac
+    done
+
+    # make sure we're in a git repo
+    inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+    if [ ! "$inside_git_repo" ]; then
+        echo ${RED}"ERROR! Not inside a git repo. Quitting..."
+        return
+    fi
+
+    # assemble some variables
+    DIR=$(basename `pwd`)
+    echo "U: $U"
+    echo "B: $B"
+
+    if [ -z "$U" ] && [ -z "$B" ]; then
+        U=$(echo $1 | cut -s -d':' -f1)
+        B=$(echo $1 | cut -s -d':' -f2)
+    fi
+
+    # Check again, and error if something's missing
+    if [ -z "$U" ] && [ -z "$B" ]; then
+        U=$(echo $1 | cut -d':' -f1)
+        B=$(echo $1 | cut -d':' -f2)
+    fi
+   
+    echo "U: $U"
+    echo "B: $B"
+    echo "DIR: $DIR"
+
+
+
+
+}
+
+
+
+#-----------------------------------------------------
 # Aliases
-#----------------------------------------------------
+#-----------------------------------------------------
 
 alias cdapp='cd ${app_dir}';
 
@@ -23,6 +103,12 @@ alias drink='gulp;notify -m "Gulp task complete!" -t "Gulp" -n Frog;'
 alias dcomp='docker-compose'
 alias dcu='docker-compose up -d'
 alias dcd='docker-compose down'
+alias dcr='docker-compose restart'
+
+alias yt="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
+
+# gWiz docker "ssh"
+alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker_laravel_1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
 
 # Force crontab to open using vim
 EDITOR="/usr/bin/vim"
@@ -38,6 +124,31 @@ notify() {
 alias vbash='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
 alias mfs='php artisan migrate:fresh --seed'
+alias code_and_fork='fork . && code .'
+alias repoinit=_repoinit
+_repoinit() {
+  echo -e $Cyan"\n\ncp .env.example .env"$NC
+  cp .env.example .env
+  
+  echo -e $Cyan"\n\ncomposer install"$NC
+  composer install
+  
+  echo -e $Cyan"\n\nnpm install"$NC
+  npm install
+  
+  echo -e $Cyan"\n\nnpm run dev"$NC
+  npm run dev
+  
+  echo -e $Cyan"\n\nphp artisan key:generate"$NC
+  php artisan key:generate
+  
+  echo -e $Cyan"\n\nphp artisan migrate:fresh --seed"$NC
+  php artisan migrate:fresh --seed 
+  
+  echo -e $Cyan"\n\nphp artisan cache:clear"$NC
+  php artisan cache:clear
+}
+
 alias reporeset=_reporeset
 _reporeset() {
   echo -e $Cyan"\n\ncomposer install"$NC
@@ -75,7 +186,17 @@ mkcd() {
   cd "$1"
 }
 
-alias phpunit="./vendor/bin/phpunit"
+# alias phpunit="./vendor/bin/phpunit"
+# Try multiple places for phpunit to live
+alias pu=_phpunit
+_phpunit() {
+  if type './vendor/bin/phpunit' 2>/dev/null | grep -q 'function'; then
+    ./vendor/bin/phpunit -v "$@"
+  else
+    ./vendor/phpunit/phpunit/phpunit -v "$@"
+  fi
+}
+
 alias tink="php artisan tinker"
 alias art="php artisan"
 
@@ -88,6 +209,15 @@ _lsa(){
 
 alias logslaravel=_logslaravel
 _logslaravel() {
+  # first, what grep do we use. Check for ggrep existence, and fall back to grep
+  if type 'ggrep' 2>/dev/null | grep -q 'function'; then 
+    FNGREP="grep"
+  else
+    FNGREP="ggrep"
+  fi
+
+  which $FNGREP
+
   # see if we're in a laravel project root right now
   if [ -d "storage" ]; then
     project_root="$(pwd)/"
@@ -128,15 +258,15 @@ _logslaravel() {
     project_root="${project_root}app/";
   fi
   clear;
-  echo -e $BYellow"tail -f -n 150 laravel*.log\n"$NC;
+  echo -e $BYellow"tail -f -n 150 laravel.log\n"$NC;
   if [ "$1" = "-f" ]; then
     # Filter out the stack trace lines (easier to read)
     echo "Filtering using:\n";
     echo -e $BYellow"grep -i -E \"^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next exception\" --color\n"$NC;
-    tail -f -n 450 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:" --color
+    tail -f -n 450 "$project_root"storage/logs/laravel.log | $FNGREP -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:" --color
   else
-    tail -f -n 150 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:||\/([[:alnum:]]+(\.php)?:[[:digit:]]+)$" --color=always | GREP_COLOR="1;36"  grep -iE "(\[internal function\]|\{main\}|\/([[:alnum:]]+(\.php)?\([[:digit:]]+\)):|$)" --color=always
-    # tail -f -n 150 "$project_root"storage/logs/laravel*.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:|$" --color
+    tail -f -n 50 "$project_root"storage/logs/laravel.log | $FNGREP -iE '^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\] [[:alnum:]\.]+:|Next [\w\W]+?\:|\/([[:alnum:]]+(\.php)?:[[:digit:]]+)|$' --color=always 
+    # tail -f -n 150 "$project_root"storage/logs/laravel.log | grep -i -E "^\[[[:digit:]]{4}\-[[:digit:]]{2}\-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}\]|Next [\w\W]+?\:|$" --color
   fi
 
 }
@@ -146,7 +276,7 @@ alias gs='git status'
 alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"up to date\"$NC\n";git fetch -v --all -t -p --progress 2>&1 | grep -v "up to date"'
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gd='echo -e $BGreen"git diff --color=always\n\n"$NC;git diff --color=always'
-alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "geneweaver" | xargs -n 1 git branch -d'
+alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "geneweaver" | grep -v "release-1.x" | xargs -n 1 git branch -d'
 
 # sync a fork using the upstream branch 
 gfu(){
