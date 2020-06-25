@@ -197,6 +197,18 @@ _phpunit() {
   fi
 }
 
+# Try multiple places for phpunit-watcher, falling back to global
+alias pw=_phpunitwatcher
+_phpunitwatcher() {
+  if type './vendor/bin/phpunit-watcher' 2>/dev/null | grep -q 'function'; then
+    ./vendor/bin/phpunit-watcher watch "$@"
+  elif type './vendor/bin/phpunit-watcher' 2>/dev/null | grep -q 'function'; then
+    ./bin/phpunit-watcher watch "$@"
+  else
+    phpunit-watcher watch "$@"
+  fi
+}
+
 alias tink="php artisan tinker"
 alias art="php artisan"
 
