@@ -88,12 +88,12 @@ cask "quicklookase"
 cask "suspicious-package"
 cask "webpquicklook"
 
-cask install slack
-cask install fork
-cask install tableplus
+cask install "slack"
+cask install "fork"
+cask install "tableplus"
 cask install "karabiner-elements"
 cask install "visual-studio-code"
-cask install docker
-cask install hammerspoon
-cask install backblaze
-cask install spotify
+cask install "docker"
+cask install "hammerspoon"
+cask install "backblaze"
+cask install "spotify"
