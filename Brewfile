@@ -79,6 +79,8 @@ brew "eugenmayer/dockersync/unox"
 brew "jakehilborn/jakehilborn/displayplacer"
 brew "nektos/tap/act"
 
+brew "composer"
+
 cask "slack"
 cask "fork"
 cask "tableplus"
