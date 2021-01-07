@@ -5,6 +5,7 @@
 source ~/.aliases
 
 # Path to your oh-my-zsh installation.
+ZSH_DISABLE_COMPFIX=true
 export ZSH=/Users/jakebathman/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
@@ -69,19 +70,12 @@ plugins=(
   autojump
   brew
   catimg
-  chucknorris
-  git-flow
   jsontools
   npm
-  nyan
   redis-cli
   sudo
   supervisor
   systemd
-  tmux
-  tmuxinator
-  vagrant
-  web-search
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -117,6 +111,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 source ~/.aliases
 
 # Set Spaceship ZSH as a prompt
+fpath=( "$HOME/.zfunctions" $fpath )
 autoload -U promptinit; promptinit
 prompt spaceship
 
@@ -148,7 +143,6 @@ SPACESHIP_PROMPT_ORDER=(
   pyenv         # Pyenv section
   dotnet        # .NET section
   ember         # Ember.js section
-  kubecontext   # Kubectl context section
   exec_time     # Execution time
   line_sep      # Line break
   battery       # Battery level and status

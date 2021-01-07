@@ -5,7 +5,7 @@
 #   and can be based on ~./dotfiles/variables_default
 source ~/.variables
 
-PATH=$PATH:$HOME/bin:$HOME/.composer/vendor/bin:~/Sites/tools/flutter/bin
+PATH=$PATH:$HOME/bin:$HOME/.composer/vendor/bin:~/sites/tools/flutter/bin
 export PATH
 
 #-----------------------------------------------------

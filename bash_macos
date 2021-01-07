@@ -12,11 +12,11 @@ _lsa(){
 }
 
 # Local directories
-alias sites='cd ~/Sites'
-alias scripts='cd ~/Sites/scripts'
+alias sites='cd ~/sites'
+alias scripts='cd ~/sites/scripts'
 alias p='cd ~/projects'
-alias gdock='cd ~/Sites/gene/gene-docker'
-alias gapi='cd ~/Sites/gene/gene-docker/apps/gene.com/trunk/subdomains/api'
+alias gdock='cd ~/sites/gene/gene-docker'
+alias gapi='cd ~/sites/gene/gene-docker/apps/gene.com/trunk/subdomains/api'
 
 # Enable color in macOS terminal
 export CLICOLOR=1
@@ -37,9 +37,9 @@ function nvm {
 }
 
 
-alias geneup="~/Sites/scripts/gene_up.sh"
-alias karaniup="~/Sites/scripts/karani_up.sh"
-alias dssh="~/Sites/scripts/docker_ssh_command.sh"
+alias geneup="~/sites/scripts/gene_up.sh"
+alias karaniup="~/sites/scripts/karani_up.sh"
+alias dssh="~/sites/scripts/docker_ssh_command.sh"
 
 # Send system notificaction
 notify(){
