@@ -80,6 +80,7 @@ brew "jakehilborn/jakehilborn/displayplacer"
 brew "nektos/tap/act"
 
 brew "composer"
+brew "ngrok"
 
 cask "slack"
 cask "fork"
