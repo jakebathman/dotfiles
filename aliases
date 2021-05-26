@@ -12,6 +12,8 @@ export PATH
 # SCRATCH
 #-----------------------------------------------------
 
+alias cpr=/Users/jakebathman/sites/scripts/commit-to-pr/commit-to-pr
+
 function git_add_remote() { 
 
     RED="\033[1;91m"
@@ -288,7 +290,7 @@ alias gs='git status'
 alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"up to date\"$NC\n";git fetch -v --all -t -p --progress 2>&1 | grep -v "up to date"'
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gd='echo -e $BGreen"git diff --color=always\n\n"$NC;git diff --color=always'
-alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "geneweaver" | grep -v "release-1.x" | xargs -n 1 git branch -d'
+alias gprune='git branch --merged | grep -v "\*" | grep -vE "^\s*(master|prod|main|qa|develop|geneweaver|release-1.x)" | xargs -n 1 git branch -d'
 
 # sync a fork using the upstream branch 
 gfu(){
@@ -381,6 +383,7 @@ alias beanstats='echo -e $BGreen"echo -e "stats\r\n" | nc localhost 11300 | grep
 alias cdump='composer dump-autoload'
 
 untar() { tar -xvzf "$1"; }
+zip() { tar -czvf "$1".gz "$1"; }
 
 # Parse the ifconfig return for IPs (IPv4 and IPv6) and display them nicely according to adapter
 # Yes, it's overkill. 
