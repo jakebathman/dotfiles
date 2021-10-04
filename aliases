@@ -110,7 +110,7 @@ alias dcr='docker-compose restart'
 alias yt="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
 
 # gWiz docker "ssh"
-alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker_laravel_1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
+alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker-laravel-1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
 
 # Force crontab to open using vim
 EDITOR="/usr/bin/vim"

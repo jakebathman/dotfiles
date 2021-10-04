@@ -1,5 +1,5 @@
 # .bashrc
-echo -e "\nWELCOME TO BASHRC\n"
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
