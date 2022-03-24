@@ -1,6 +1,14 @@
+# Dotfiles
+
+## Adding something new
+If adding a new file, make sure to add it to the file list inside `installDotFiles.sh`
+
+
+
+## Installing
 On a new server, run the following command inside `~`:
 
-## SSH Key
+### SSH Key
 If needed, generate a new SSH key and add to GitHub settings:
 1. `ssh-keygen`
 2. `ssh-agent`
@@ -9,17 +17,17 @@ If needed, generate a new SSH key and add to GitHub settings:
 5. Go to https://github.com/settings/keys and create a new key
 6. Paste that stuff and hit save
 
-## Clone this repo
+### Clone this repo
 `git clone git@github.com:jakebathman/dotfiles.git`
 
-## "Install" the dotfiles
+### "Install" the dotfiles
 `cd ~/dotfiles && git pull && chmod +x ./installDotFiles.sh && ./installDotFiles.sh && source ~/.bashrc`
 
-## Required dependencies
+### Required dependencies
 `logslaravel` requires `dialog`: 
 `yum install dialog -y`
 or
 `brew install dialog -y`
 
-## All done
+### All done
 Go have fun

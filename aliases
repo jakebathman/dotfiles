@@ -82,12 +82,7 @@ You can also pass it using the ${CYAN}-u username${NC} and ${CYAN}-b branch-name
     echo "U: $U"
     echo "B: $B"
     echo "DIR: $DIR"
-
-
-
-
 }
-
 
 
 #-----------------------------------------------------
@@ -110,7 +105,7 @@ alias dcr='docker-compose restart'
 alias yt="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
 
 # gWiz docker "ssh"
-alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker-laravel-1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
+alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker_laravel_1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
 
 # Force crontab to open using vim
 EDITOR="/usr/bin/vim"
@@ -481,6 +476,9 @@ colorcodes() {
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
+#-----------------------------------------------------
+# ADDITIONAL
+#-----------------------------------------------------
 
 
 # Source OS specific revisions

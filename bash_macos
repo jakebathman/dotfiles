@@ -36,9 +36,6 @@ function nvm {
   fi
 }
 
-
-alias geneup="~/sites/scripts/gene_up.sh"
-alias karaniup="~/sites/scripts/karani_up.sh"
 alias dssh="~/sites/scripts/docker_ssh_command.sh"
 
 # Send system notificaction
