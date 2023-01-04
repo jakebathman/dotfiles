@@ -6,6 +6,7 @@
 source ~/.variables
 
 PATH=$PATH:$HOME/bin:$HOME/.composer/vendor/bin:~/sites/tools/flutter/bin
+PATH=$(pyenv root)/shims:$PATH
 export PATH
 
 #-----------------------------------------------------
@@ -104,8 +105,11 @@ alias dcr='docker-compose restart'
 
 alias yt="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
 
+# Copy SSH, but first copy name of computer (for key label in GitHub or Forge)
+alias copyssh="echo Merricat - JakeBathman MacBook Pro | pbcopy && pbcopy < ~/.ssh/id_rsa.pub"
+
 # gWiz docker "ssh"
-alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker_laravel_1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
+alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker-laravel-1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
 
 # Force crontab to open using vim
 EDITOR="/usr/bin/vim"

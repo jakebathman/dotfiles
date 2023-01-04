@@ -187,7 +187,7 @@ clear;
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/php@8.1/bin:$PATH"
 # export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
-export PATH="/usr/local/opt/php@8.0/bin:$PATH"
+# export PATH="/usr/local/opt/php@8.0/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
