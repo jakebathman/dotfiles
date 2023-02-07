@@ -18,6 +18,9 @@ alias p='cd ~/projects'
 alias gdock='cd ~/sites/gene/gene-docker'
 alias gapi='cd ~/sites/gene/gene-docker/apps/gene.com/trunk/subdomains/api'
 
+# Use VS Code as editor
+export EDITOR="code -w"
+
 # Enable color in macOS terminal
 export CLICOLOR=1
 # Better colors for ls command

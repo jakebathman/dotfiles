@@ -111,11 +111,6 @@ alias copyssh="echo Merricat - JakeBathman MacBook Pro | pbcopy && pbcopy < ~/.s
 # gWiz docker "ssh"
 alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker-laravel-1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
 
-# Force crontab to open using vim
-EDITOR="/usr/bin/vim"
-export EDITOR
-
-
 # Placeholder notification function
 # Should be overridden on each platform
 notify() {
@@ -382,7 +377,7 @@ alias beanstats='echo -e $BGreen"echo -e "stats\r\n" | nc localhost 11300 | grep
 alias cdump='composer dump-autoload'
 
 untar() { tar -xvzf "$1"; }
-zip() { tar -czvf "$1".gz "$1"; }
+#zip() { tar -czvf "$1".gz "$1"; }
 
 # Parse the ifconfig return for IPs (IPv4 and IPv6) and display them nicely according to adapter
 # Yes, it's overkill. 
