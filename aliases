@@ -152,10 +152,16 @@ _reporeset() {
   
   echo -e $Cyan"\n\nnpm install"$NC
   npm install
-  
-  echo -e $Cyan"\n\nnpm run dev"$NC
-  npm run dev
-  
+
+  if npm run | grep -A1 'dev' | grep -q 'vite'; then
+    # This repo uses vite, so run build instead of dev
+    echo -e $Cyan"\n\nnpm run build"$NC
+    npm run build
+  else
+    echo -e $Cyan"\n\nnpm run dev"$NC
+    npm run dev
+  fi
+
   echo -e $Cyan"\n\nphp artisan migrate:fresh --seed"$NC
   php artisan migrate:fresh --seed 
   

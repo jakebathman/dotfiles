@@ -1,6 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # FIRST: load aliases to get aliases (prompt and other stuff might be overridden below)
 source ~/.aliases
 
@@ -83,33 +80,16 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/.aliases
+# Set Pure as prompt
+# fpath+=($HOME/.oh-my-zsh/plugins/pure) # Add Pure to fpath
+# autoload -U promptinit; promptinit
+# prompt pure
 
 # Set Spaceship ZSH as a prompt
 fpath=( "$HOME/.zfunctions" $fpath )
@@ -125,30 +105,15 @@ SPACESHIP_PROMPT_ORDER=(
     dir           # Current directory section
     host          # Hostname section
     git           # Git section (git_branch + git_status)
-    hg            # Mercurial section (hg_branch  + hg_status)
     package       # Package version
     node          # Node.js section
-    ruby          # Ruby section
-    elixir        # Elixir section
     xcode         # Xcode section
     swift         # Swift section
     golang        # Go section
     php           # PHP section
-    rust          # Rust section
-    haskell       # Haskell Stack section
-    julia         # Julia section
     docker        # Docker section
-    aws           # Amazon Web Services section
-    venv          # virtualenv section
-    conda         # conda virtualenv section
-    pyenv         # Pyenv section
-    dotnet        # .NET section
-    ember         # Ember.js section
     exec_time     # Execution time
     line_sep      # Line break
-    battery       # Battery level and status
-    vi_mode       # Vi-mode indicator
-    jobs          # Background jobs indicator
     exit_code     # Exit code section
     char          # Prompt character
 )
@@ -159,7 +124,6 @@ SPACESHIP_PACKAGE_SHOW=false
 SPACESHIP_NODE_SHOW=false
 SPACESHIP_PHP_SHOW=false
 SPACESHIP_RUBY_SHOW=false
-SPACESHIP_BATTERY_THRESHOLD=25
 SPACESHIP_DIR_PREFIX=""
 
 SPACESHIP_GIT_BRANCH_COLOR="081" # blue
@@ -185,10 +149,33 @@ autoload -U compinit; compinit
 clear;
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/php@8.1/bin:$PATH"
+# export PATH="/usr/local/opt/php@8.1/bin:$PATH"
 # export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
 # export PATH="/usr/local/opt/php@8.0/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+##### Easily switch between PHP versions just by using the version number as an alias
+##### Source: https://localheinz.com/articles/2020/05/05/switching-php-versions-when-using-homebrew/
+
+# determine versions of PHP installed with HomeBrew
+installedPhpVersions=($(brew ls --versions | ggrep -E 'php(@.*)?\s' | ggrep -oP '(?<=\s)\d\.\d' | uniq | sort))
+
+# create alias for every version of PHP installed with HomeBrew
+for phpVersion in ${installedPhpVersions[*]}; do
+    value="{"
+
+    for otherPhpVersion in ${installedPhpVersions[*]}; do
+        if [ "${otherPhpVersion}" = "${phpVersion}" ]; then
+            continue;
+        fi
+
+        value="${value} brew unlink php@${otherPhpVersion};"
+    done
+
+    value="${value} brew link php@${phpVersion} --force --overwrite; } &> /dev/null && php -v"
+
+    alias "${phpVersion}"="${value}"
+done
