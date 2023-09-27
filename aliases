@@ -131,9 +131,15 @@ _repoinit() {
   
   echo -e $Cyan"\n\nnpm install"$NC
   npm install
-  
-  echo -e $Cyan"\n\nnpm run dev"$NC
-  npm run dev
+
+  if npm run | grep -A1 'dev' | grep -q 'vite'; then
+    # This repo uses vite, so run build instead of dev
+    echo -e $Cyan"\n\nnpm run build"$NC
+    npm run build
+  else
+    echo -e $Cyan"\n\nnpm run dev"$NC
+    npm run dev
+  fi
   
   echo -e $Cyan"\n\nphp artisan key:generate"$NC
   php artisan key:generate
@@ -147,6 +153,19 @@ _repoinit() {
 
 alias reporeset=_reporeset
 _reporeset() {
+  if [[ $(basename "$PWD") == "nexus" ]]; then
+    echo "Resetting the repo using Lando"
+    _landoreporeset
+    return
+  fi
+
+  # For projects that use sail, run through sail instead
+  if [[ -f composer.json ]] && grep -q '"laravel/sail"' composer.json; then
+    echo "Resetting the repo using Sail"
+    _sailreporeset
+    return
+  fi
+
   echo -e $Cyan"\n\ncomposer install"$NC
   composer install
   
@@ -169,6 +188,71 @@ _reporeset() {
   php artisan cache:clear
 }
 
+_landoreporeset() {
+  echo -e $Cyan"\n\nlando composer install"$NC
+  lando composer install
+  
+  echo -e $Cyan"\n\nlando npm install"$NC
+  lando npm install
+
+  if lando npm run | grep -A1 'dev' | grep -q 'vite'; then
+    # This repo uses vite, so run build instead of dev
+    echo -e $Cyan"\n\nlando npm run build"$NC
+    lando npm run build
+  else
+    echo -e $Cyan"\n\nlando npm run dev"$NC
+    lando npm run dev
+  fi
+
+  echo -e $Cyan"\n\nlando artisan migrate:fresh --seed"$NC
+  lando artisan migrate:fresh --seed 
+  
+  echo -e $Cyan"\n\nlando artisan cache:clear"$NC
+  lando artisan cache:clear
+}
+
+_sailreporeset() {
+  # Check that the container is running
+  container_name=$(basename "$(pwd)")
+
+  if docker ps --format '{{.Names}}' | grep -q "${container_name}[_-]laravel.test"; then
+    echo "Laravel Sail container is running.\n"
+  else
+    echo "Laravel Sail container is NOT running.\n"
+    read -p "Would you like to start the Laravel Sail container? (y/n) " answer
+
+    case ${answer:0:1} in
+      y|Y )
+        ./vendor/bin/sail up -d
+      ;;
+      * )
+        echo "Not starting the Laravel Sail container.\n"
+      ;;
+    esac
+  fi
+
+  echo -e $Cyan"\n\nsail composer install"$NC
+  sail composer install
+  
+  echo -e $Cyan"\n\nsail npm install"$NC
+  sail npm install
+
+  if sail npm run | grep -A1 'dev' | grep -q 'vite'; then
+    # This repo uses vite, so run build instead of dev
+    echo -e $Cyan"\n\nsail npm run build"$NC
+    sail npm run build
+  else
+    echo -e $Cyan"\n\nsail npm run dev"$NC
+    sail npm run dev
+  fi
+
+  echo -e $Cyan"\n\nsail artisan migrate:fresh --seed"$NC
+  sail artisan migrate:fresh --seed 
+  
+  echo -e $Cyan"\n\nsail artisan cache:clear"$NC
+  sail artisan cache:clear
+}
+
 alias vz='vim ~/.zshrc'
 alias sz='source ~/.zshrc'
 
@@ -188,14 +272,16 @@ mkcd() {
   cd "$1"
 }
 
+alias sail='[ -f sail ] && ./sail || ./vendor/bin/sail'
+
 # alias phpunit="./vendor/bin/phpunit"
 # Try multiple places for phpunit to live
 alias pu=_phpunit
 _phpunit() {
   if type './vendor/bin/phpunit' 2>/dev/null | grep -q 'function'; then
-    ./vendor/bin/phpunit -v "$@"
+    ./vendor/bin/phpunit "$@"
   else
-    ./vendor/phpunit/phpunit/phpunit -v "$@"
+    ./vendor/phpunit/phpunit/phpunit "$@"
   fi
 }
 

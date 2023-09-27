@@ -164,18 +164,22 @@ export NVM_DIR="$HOME/.nvm"
 installedPhpVersions=($(brew ls --versions | ggrep -E 'php(@.*)?\s' | ggrep -oP '(?<=\s)\d\.\d' | uniq | sort))
 
 # create alias for every version of PHP installed with HomeBrew
-for phpVersion in ${installedPhpVersions[*]}; do
-    value="{"
-
-    for otherPhpVersion in ${installedPhpVersions[*]}; do
-        if [ "${otherPhpVersion}" = "${phpVersion}" ]; then
-            continue;
-        fi
-
-        value="${value} brew unlink php@${otherPhpVersion};"
+# e.g. 8.0 // 8.1 // 8.2 will swap to that version on the command line
+_makePhpVersionAliases() {
+    for phpVersion in ${installedPhpVersions[*]}; do
+        value="{"
+        
+        for otherPhpVersion in ${installedPhpVersions[*]}; do
+            if [ "${otherPhpVersion}" = "${phpVersion}" ]; then
+                continue;
+            fi
+            
+            value="${value} brew unlink php@${otherPhpVersion};"
+        done
+        
+        value="${value} brew link php@${phpVersion} --force --overwrite; } &> /dev/null && php -v"
+        # echo "Creating alias for PHP ${phpVersion} with value: ${value}\n"
+        alias "${phpVersion}"="${value}"
     done
-
-    value="${value} brew link php@${phpVersion} --force --overwrite; } &> /dev/null && php -v"
-
-    alias "${phpVersion}"="${value}"
-done
+}
+_makePhpVersionAliases
