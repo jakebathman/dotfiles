@@ -218,8 +218,9 @@ _sailreporeset() {
   if docker ps --format '{{.Names}}' | grep -q "${container_name}[_-]laravel.test"; then
     echo "Laravel Sail container is running.\n"
   else
-    echo "Laravel Sail container is NOT running.\n"
-    read -p "Would you like to start the Laravel Sail container? (y/n) " answer
+    echo -e $RED"Laravel Sail container is NOT running.\n"$NC
+    echo "\nWould you like to start the Laravel Sail container? (y/n) "
+    read answer
 
     case ${answer:0:1} in
       y|Y )
@@ -246,8 +247,19 @@ _sailreporeset() {
     sail npm run dev
   fi
 
-  echo -e $Cyan"\n\nsail artisan migrate:fresh --seed"$NC
-  sail artisan migrate:fresh --seed 
+  echo "Do you want to migrate fresh? (y/n) "
+  read answer
+
+  case ${answer:0:1} in
+    y|Y )
+      echo -e $Cyan"\n\nsail artisan migrate:fresh --seed"$NC
+      sail artisan migrate:fresh --seed
+    ;;
+    * )
+      echo -e $Cyan"\n\nsail artisan migrate"$NC
+      sail artisan migrate
+    ;;
+  esac
   
   echo -e $Cyan"\n\nsail artisan cache:clear"$NC
   sail artisan cache:clear
@@ -376,7 +388,7 @@ alias gs='git status'
 alias gf='echo -e $BGreen"git fetch -v --all -t -p --progress 2>&1 | grep -v \"up to date\"$NC\n";git fetch -v --all -t -p --progress 2>&1 | grep -v "up to date"'
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gd='echo -e $BGreen"git diff --color=always\n\n"$NC;git diff --color=always'
-alias gprune='git branch --merged | grep -v "\*" | grep -vE "^\s*(master|prod|main|qa|develop|geneweaver|release-1.x)" | xargs -n 1 git branch -d'
+alias gprune='git branch --merged | grep -v "\*" | grep -vE "^\s*(master|prod|main|qa|develop|geneweaver|release-1.x|dev)" | xargs -n 1 git branch -d'
 
 # sync a fork using the upstream branch 
 gfu(){
