@@ -11,7 +11,7 @@ export ZSH=/Users/jakebathman/.oh-my-zsh
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="agnoster"
 #ZSH_THEME="gianu"
-ZSH_THEME="spaceship"
+# ZSH_THEME="spaceship"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -73,7 +73,6 @@ plugins=(
     sudo
     supervisor
     systemd
-    artisan
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -94,43 +93,43 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Set Spaceship ZSH as a prompt
 fpath=( "$HOME/.zfunctions" $fpath )
 autoload -U promptinit; promptinit
-prompt spaceship
+# prompt spaceship
 
 #############
 # START Spaceship prompt settings
 
-SPACESHIP_PROMPT_ORDER=(
-    time          # Time stampts section
-    user          # Username section
-    dir           # Current directory section
-    host          # Hostname section
-    git           # Git section (git_branch + git_status)
-    package       # Package version
-    node          # Node.js section
-    xcode         # Xcode section
-    swift         # Swift section
-    golang        # Go section
-    php           # PHP section
-    docker        # Docker section
-    exec_time     # Execution time
-    line_sep      # Line break
-    exit_code     # Exit code section
-    char          # Prompt character
-)
+# SPACESHIP_PROMPT_ORDER=(
+#     time          # Time stampts section
+#     user          # Username section
+#     dir           # Current directory section
+#     host          # Hostname section
+#     git           # Git section (git_branch + git_status)
+#     package       # Package version
+#     node          # Node.js section
+#     xcode         # Xcode section
+#     swift         # Swift section
+#     golang        # Go section
+#     php           # PHP section
+#     docker        # Docker section
+#     exec_time     # Execution time
+#     line_sep      # Line break
+#     exit_code     # Exit code section
+#     char          # Prompt character
+# )
 
-SPACESHIP_PROMPT_SEPARATE_LINE=false
-SPACESHIP_USER_SHOW=needed
-SPACESHIP_PACKAGE_SHOW=false
-SPACESHIP_NODE_SHOW=false
-SPACESHIP_PHP_SHOW=false
-SPACESHIP_RUBY_SHOW=false
-SPACESHIP_DIR_PREFIX=""
+# SPACESHIP_PROMPT_SEPARATE_LINE=false
+# SPACESHIP_USER_SHOW=needed
+# SPACESHIP_PACKAGE_SHOW=false
+# SPACESHIP_NODE_SHOW=false
+# SPACESHIP_PHP_SHOW=false
+# SPACESHIP_RUBY_SHOW=false
+# SPACESHIP_DIR_PREFIX=""
 
-SPACESHIP_GIT_BRANCH_COLOR="081" # blue
-SPACESHIP_DIR_COLOR="208" # orange
+# SPACESHIP_GIT_BRANCH_COLOR="081" # blue
+# SPACESHIP_DIR_COLOR="208" # orange
 
 # Fix for git directory issue: https://github.com/denysdovhan/spaceship-prompt/issues/343
-SPACESHIP_DIR_TRUNC_REPO=false
+# SPACESHIP_DIR_TRUNC_REPO=false
 
 # END Spaceship prompt settings
 #############
@@ -183,3 +182,26 @@ _makePhpVersionAliases() {
     done
 }
 _makePhpVersionAliases
+
+# Make mysql available on the command line
+# Also do other stuff: https://crobert.dev/articles/accessing-laravel-herds-mysql-service-or-any-other-service-from-your-cli
+export PATH="/Users/Shared/Herd/services/mysql/8.0.36/bin:$PATH"
+
+# Herd injected PHP 8.2 configuration.
+export HERD_PHP_82_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/Herd/config/php/82/"
+
+
+# Herd injected PHP 8.1 configuration.
+export HERD_PHP_81_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/Herd/config/php/81/"
+
+
+# Herd injected PHP 8.0 configuration.
+export HERD_PHP_80_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/Herd/config/php/80/"
+
+
+# Herd injected PHP binary.
+export PATH="/Users/jakebathman/Library/Application Support/Herd/bin/":$PATH
+
+
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/Herd/config/php/83/"
