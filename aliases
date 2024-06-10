@@ -163,9 +163,15 @@ _reporeset() {
 
   # For projects that use sail, run through sail instead
   if [[ -f composer.json ]] && grep -q '"laravel/sail"' composer.json; then
-    echo "Resetting the repo using Sail"
-    _sailreporeset
-    return
+    echo "This repo seems to use Sail. Reset using Sail?"
+    gum confirm --default=false --affirmative "Use Sail" --negative "Use artisan" 
+
+    # 0 is affirmative
+    if [[ $? -eq 0 ]]; then 
+      echo "Resetting the repo using Sail"
+      _sailreporeset
+      return
+    fi
   fi
 
   echo -e $Cyan"\n\ncomposer install"$NC

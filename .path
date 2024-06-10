@@ -1,0 +1,8 @@
+PATH="/Users/jakebathman/Library/Application Support/Postgres/var-16/postgresql.conf:$PATH"
+
+PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/sbin:$PATH"
+
+# Herd binaries
+PATH="/Users/jakebathman/Library/Application Support/Herd/bin/":$PATH
+
+export PATH

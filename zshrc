@@ -1,5 +1,6 @@
 # FIRST: load aliases to get aliases (prompt and other stuff might be overridden below)
 source ~/.aliases
+source ~/.path
 
 # Path to your oh-my-zsh installation.
 ZSH_DISABLE_COMPFIX=true
@@ -185,6 +186,8 @@ _makePhpVersionAliases
 
 # Make mysql available on the command line
 # Also do other stuff: https://crobert.dev/articles/accessing-laravel-herds-mysql-service-or-any-other-service-from-your-cli
+#   - Add mysql to the PATH
+#   - Add user/password/socket path to ~/.my.cnf
 export PATH="/Users/Shared/Herd/services/mysql/8.0.36/bin:$PATH"
 
 # Herd injected PHP 8.2 configuration.
