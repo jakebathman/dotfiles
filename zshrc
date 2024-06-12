@@ -1,3 +1,18 @@
+
+
+# Record the initial start time
+start_time=$(gdate +%s.%N)
+
+# Function to calculate, print elapsed time with a custom message, and reset start time
+print_elapsed_time() {
+  local message=$1
+  local current_time=$(gdate +%s.%N)
+  local elapsed_time=$(echo "$current_time - $start_time" | bc)
+  echo "${message}: ${elapsed_time}s"
+  start_time=$current_time  # Reset the start time
+}
+
+
 # FIRST: load aliases to get aliases (prompt and other stuff might be overridden below)
 source ~/.aliases
 source ~/.path
@@ -161,7 +176,7 @@ export NVM_DIR="$HOME/.nvm"
 ##### Source: https://localheinz.com/articles/2020/05/05/switching-php-versions-when-using-homebrew/
 
 # determine versions of PHP installed with HomeBrew
-installedPhpVersions=($(brew ls --versions | ggrep -E 'php(@.*)?\s' | ggrep -oP '(?<=\s)\d\.\d' | uniq | sort))
+# installedPhpVersions=($(brew ls --versions | ggrep -E 'php(@.*)?\s' | ggrep -oP '(?<=\s)\d\.\d' | uniq | sort))
 
 # create alias for every version of PHP installed with HomeBrew
 # e.g. 8.0 // 8.1 // 8.2 will swap to that version on the command line
@@ -182,7 +197,7 @@ _makePhpVersionAliases() {
         alias "${phpVersion}"="${value}"
     done
 }
-_makePhpVersionAliases
+# _makePhpVersionAliases
 
 # Make mysql available on the command line
 # Also do other stuff: https://crobert.dev/articles/accessing-laravel-herds-mysql-service-or-any-other-service-from-your-cli
