@@ -3,8 +3,6 @@
 ## Adding something new
 If adding a new file, make sure to add it to the file list inside `installDotFiles.sh`
 
-
-
 ## Installing
 On a new server, run the following command inside `~`:
 
@@ -24,10 +22,36 @@ If needed, generate a new SSH key and add to GitHub settings:
 `cd ~/dotfiles && git pull && chmod +x ./installDotFiles.sh && ./installDotFiles.sh && source ~/.bashrc`
 
 ### Required dependencies
-`logslaravel` requires `dialog`: 
-`yum install dialog -y`
-or
-`brew install dialog -y`
+1. The basics: `brew install curl wget`
+
+2. The `logslaravel` function requires `dialog`: 
+```sh
+# on macOS
+brew install dialog -y
+# on linux
+yum install dialog -y
+```
+
+3. Install OhMyZSH (for plugins and stuff)
+```sh
+sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+```
+
+4. Install autojump for `j`:
+```sh
+brew install autojump
+```
+
+5. Install `nvm`:
+```sh
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
+
+### Other modifications 
+1. Symlink `php` from Herd to `/usr/local/bin/php` for Alfred to be able to run PHP scripts:
+```sh
+sudo ln -s "/Users/jakebathman/Library/Application Support/Herd/bin//php" /usr/local/bin/php
+```
 
 ### All done
 Go have fun
