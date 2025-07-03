@@ -5,3 +5,6 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Created by `pipx` on 2025-05-06 16:29:30
+export PATH="$PATH:/Users/jakebathman/.local/bin"

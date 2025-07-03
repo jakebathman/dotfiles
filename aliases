@@ -92,6 +92,10 @@ You can also pass it using the ${CYAN}-u username${NC} and ${CYAN}-b branch-name
 # Aliases
 #-----------------------------------------------------
 
+alias warp=_openWarp
+_openWarp() {
+  open "warp://action/new_tab?path=$(pwd)" &
+}
 alias cdapp='cd ${app_dir}';
 
 alias tm='tmux -2 attach || tmux -2'
@@ -153,13 +157,34 @@ _repoinit() {
   php artisan cache:clear
 }
 
+# For IEL, run duster, phpstan, etc.
+# Current 
+alias checks=_checks
+_checks() {
+  # If not in the nexus directory, stop here
+  if [[ $(basename "$PWD") != "nexus" ]]; then
+    echo -e $BRed"\n\nThese checks are only for IEL Nexus\n"$NC
+    echo "Please cd into ~/sites/git/iel/nexus and try again."
+    return 1
+  fi
+
+  # Run duster fix
+  echo -e $Cyan"\n\nRunning duster fix"$NC
+  duster fix
+
+  # Run phpstan analyze
+  echo -e $Cyan"\n\nRunning phpstan analyze"$NC
+  ./vendor/bin/phpstan analyze
+}
+
 alias reporeset=_reporeset
 _reporeset() {
-  if [[ $(basename "$PWD") == "nexus" ]]; then
-    echo "Resetting the repo using Lando"
-    _landoreporeset
-    return
-  fi
+  # As of 2025, I'm no longer going to use lando for IEL Nexus locally
+  # if [[ $(basename "$PWD") == "nexus" ]]; then
+  #   echo "Resetting the repo using Lando"
+  #   _landoreporeset
+  #   return
+  # fi
 
   # For projects that use sail, run through sail instead
   if [[ -f composer.json ]] && grep -q '"laravel/sail"' composer.json; then
