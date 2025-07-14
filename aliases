@@ -177,6 +177,18 @@ _checks() {
   ./vendor/bin/phpstan analyze
 }
 
+# After updating to a new QA head (e.g., for a new branch),
+# run this to update composer, npm, and run migrations/operations
+ielupdate() {
+  composer install
+  
+  npm install
+  npm run build:dev
+
+  php artisan migrate
+  php artisan operations
+}
+
 alias reporeset=_reporeset
 _reporeset() {
   # As of 2025, I'm no longer going to use lando for IEL Nexus locally
