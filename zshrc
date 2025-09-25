@@ -234,3 +234,7 @@ export HERD_PHP_84_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/
 
 # Created by `pipx` on 2025-05-06 16:29:30
 export PATH="$PATH:/Users/jakebathman/.local/bin"
+
+
+# Herd injected PHP 8.5 configuration.
+export HERD_PHP_85_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/Herd/config/php/85/"

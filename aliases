@@ -112,7 +112,7 @@ alias dcr='docker-compose restart'
 alias yt="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'"
 
 # Copy SSH, but first copy name of computer (for key label in GitHub or Forge)
-alias copyssh="echo Merricat - JakeBathman MacBook Pro | pbcopy && pbcopy < ~/.ssh/id_rsa.pub"
+alias copyssh="echo Merricat - JakeBathman MacBook Pro | pbcopy && sleep 1 && pbcopy < ~/.ssh/id_rsa.pub"
 
 # gWiz docker "ssh"
 alias gssh='clear && echo "root@gwiz-docker" && docker exec -it gwiz-docker-laravel-1 bash -c "cd /mnt/shared/sites;exec /bin/bash -sh"'
@@ -125,7 +125,6 @@ notify() {
 
 alias vbash='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
-alias mfs='php artisan migrate:fresh --seed'
 alias code_and_fork='fork . && code .'
 alias repoinit=_repoinit
 _repoinit() {
@@ -157,6 +156,20 @@ _repoinit() {
   php artisan cache:clear
 }
 
+# alias mfs='php artisan migrate:fresh --seed'
+
+# For IEL, mfs should do a bit more
+alias mfs=_mfs
+_mfs() {
+    php artisan migrate:fresh --seed
+
+  # If in the nexus directory, add user and roles via tinker
+  if [[ $(basename "$PWD") == "nexus" ]]; then
+    php artisan operations
+    php artisan tinker --execute="include('/Users/jakebathman/sites/scripts/iel_mfs.php')"
+  fi
+}
+
 # For IEL, run duster, phpstan, etc.
 # Current 
 alias checks=_checks
@@ -175,6 +188,8 @@ _checks() {
   # Run phpstan analyze
   echo -e $Cyan"\n\nRunning phpstan analyze"$NC
   ./vendor/bin/phpstan analyze
+
+  rector
 }
 
 # After updating to a new QA head (e.g., for a new branch),
@@ -183,10 +198,15 @@ ielupdate() {
   composer install
   
   npm install
-  npm run build:dev
+  npm run build
 
   php artisan migrate
   php artisan operations
+
+  # Check for --seed flag and run mfs if present
+  if [[ "$1" == "--seed" ]]; then
+    mfs
+  fi
 }
 
 alias reporeset=_reporeset
@@ -344,6 +364,7 @@ _phpunit() {
 
 # Try multiple places for phpunit-watcher, falling back to global
 alias pw=_phpunitwatcher
+alias pwf='pw --filter'
 _phpunitwatcher() {
   if type './vendor/bin/phpunit-watcher' 2>/dev/null | grep -q 'function'; then
     ./vendor/bin/phpunit-watcher watch "$@"
@@ -356,6 +377,7 @@ _phpunitwatcher() {
 
 alias tink="php artisan tinker"
 alias art="php artisan"
+alias pan="phpstan analyze"
 
 alias lsa=_lsa
 alias ls=_lsa
