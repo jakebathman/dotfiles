@@ -1,7 +1,17 @@
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# Lazy load RVM
+_load_rvm() {
+  unset -f rvm ruby gem bundle irb _load_rvm
+  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+}
+
+rvm()    { _load_rvm && rvm "$@"; }
+ruby()   { _load_rvm && ruby "$@"; }
+gem()    { _load_rvm && gem "$@"; }
+bundle() { _load_rvm && bundle "$@"; }
+irb()    { _load_rvm && irb "$@"; }
+
 
 
 eval "$(/opt/homebrew/bin/brew shellenv)"

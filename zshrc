@@ -168,9 +168,19 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/lo
 # export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
 # export PATH="/usr/local/opt/php@8.0/bin:$PATH"
 
+# Lazy load nvm to speed up shell startup time
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+_load_nvm() {
+  unset -f nvm node npm npx _load_nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+}
+
+nvm()  { _load_nvm && nvm "$@"; }
+node() { _load_nvm && node "$@"; }
+npm()  { _load_nvm && npm "$@"; }
+npx()  { _load_nvm && npx "$@"; }
+
 
 ##### Easily switch between PHP versions just by using the version number as an alias
 ##### Source: https://localheinz.com/articles/2020/05/05/switching-php-versions-when-using-homebrew/
@@ -238,3 +248,6 @@ export PATH="$PATH:/Users/jakebathman/.local/bin"
 
 # Herd injected PHP 8.5 configuration.
 export HERD_PHP_85_INI_SCAN_DIR="/Users/jakebathman/Library/Application Support/Herd/config/php/85/"
+
+# Added by Antigravity
+export PATH="/Users/jakebathman/.antigravity/antigravity/bin:$PATH"

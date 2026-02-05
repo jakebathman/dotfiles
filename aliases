@@ -126,6 +126,9 @@ notify() {
 alias vbash='vim ~/.bashrc'
 alias sb='source ~/.bashrc'
 alias code_and_fork='fork . && code .'
+
+alias localpw="php artisan tinker --execute=\"include('/Users/jakebathman/sites/scripts/update_local_user_password.php')\""
+
 alias repoinit=_repoinit
 _repoinit() {
   echo -e $Cyan"\n\ncp .env.example .env"$NC
@@ -161,12 +164,15 @@ _repoinit() {
 # For IEL, mfs should do a bit more
 alias mfs=_mfs
 _mfs() {
-    php artisan migrate:fresh --seed
-
   # If in the nexus directory, add user and roles via tinker
   if [[ $(basename "$PWD") == "nexus" ]]; then
+    # This mimics the deployment process for QA
+    php artisan migrate:fresh
     php artisan operations
+    php artisan db:seed
     php artisan tinker --execute="include('/Users/jakebathman/sites/scripts/iel_mfs.php')"
+  else
+    php artisan migrate:fresh --seed
   fi
 }
 
@@ -189,14 +195,23 @@ _checks() {
   echo -e $Cyan"\n\nRunning phpstan analyze"$NC
   ./vendor/bin/phpstan analyze
 
+  echo -e $Cyan"\n\nRunning rector"$NC
   rector
+
+  echo -e $Cyan"\n\nESLint"$NC
+  npx npm run lint
+
+  echo -e $Cyan"\n\nRunning vitest"$NC
+  npx vitest run --reporter dot --silent passed-only
 }
 
 # After updating to a new QA head (e.g., for a new branch),
 # run this to update composer, npm, and run migrations/operations
 ielupdate() {
+  herd use
   composer install
   
+  nvm use
   npm install
   npm run build
 
@@ -377,6 +392,7 @@ _phpunitwatcher() {
 
 alias tink="php artisan tinker"
 alias art="php artisan"
+alias sart="sail artisan"
 alias pan="phpstan analyze"
 
 alias lsa=_lsa
