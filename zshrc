@@ -5,11 +5,11 @@ start_time=$(gdate +%s.%N)
 
 # Function to calculate, print elapsed time with a custom message, and reset start time
 print_elapsed_time() {
-  local message=$1
-  local current_time=$(gdate +%s.%N)
-  local elapsed_time=$(echo "$current_time - $start_time" | bc)
-  echo "${message}: ${elapsed_time}s"
-  start_time=$current_time  # Reset the start time
+    local message=$1
+    local current_time=$(gdate +%s.%N)
+    local elapsed_time=$(echo "$current_time - $start_time" | bc)
+    echo "${message}: ${elapsed_time}s"
+    start_time=$current_time  # Reset the start time
 }
 
 
@@ -172,14 +172,33 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/lo
 export NVM_DIR="$HOME/.nvm"
 
 _load_nvm() {
-  unset -f nvm node npm npx _load_nvm
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    unset -f nvm node npm npx _load_nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 }
 
 nvm()  { _load_nvm && nvm "$@"; }
 node() { _load_nvm && node "$@"; }
 npm()  { _load_nvm && npm "$@"; }
 npx()  { _load_nvm && npx "$@"; }
+
+# When cd-ing into a directory, set node version based on .nvmrc file if it exists
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+    (( $+functions[_load_nvm] )) && _load_nvm
+    local nvmrc_path
+    nvmrc_path="$(nvm_find_nvmrc)"
+    
+    if [ -n "$nvmrc_path" ]; then
+        nvm use --silent
+        echo $Purple"Using .nvmrc node version $BPurple$(nvm current)"$NC
+    else
+        nvm use default --silent
+    fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
 
 
 ##### Easily switch between PHP versions just by using the version number as an alias
