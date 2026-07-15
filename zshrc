@@ -191,15 +191,78 @@ load-nvmrc() {
     
     if [ -n "$nvmrc_path" ]; then
         nvm use --silent
-        echo $Purple"Using .nvmrc node version $BPurple$(nvm current)"$NC
+        echo $Pink"node.js   $BPink$(nvm current) $Pink(.nvmrc)"$NC
     else
-        nvm use default --silent
+        # If this directory has a package.json file, check if it has an "engines" field specifying a node version
+        if [ -f package.json ]; then
+            local package_node_version
+            package_node_version=$(jq -r '.engines.node // empty' package.json 2>/dev/null)
+            if [ -n "$package_node_version" ]; then
+                nvm use "$package_node_version" --silent
+                echo $Pink"node.js   $BPink$(nvm current) $Pink(package.json engine is $package_node_version, no .nvmrc found)"$NC
+            else
+                # If no "engines" field is found, use the default version
+                echo $Pink"node.js   $BPink$(nvm current) $Pink(nvm default)"$NC
+                nvm use default --silent
+            fi
+        fi
     fi
 }
 
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
+# When cd-ing into a directory with a composer.json (Laravel repo, close
+# enough), switch Herd's CLI PHP version to match. `herd which-php` is slow
+# (~0.5s, it spawns herd.phar), so the lookup is gated behind a cheap
+# directory walk and cached per project root for the rest of the shell
+# session. `herd use` itself always runs though, no diffing against the
+# currently active version, so the versions below print every time.
+typeset -gA _herd_php_cache
+
+_find_composer_root() {
+    local dir="$PWD"
+    while [ "$dir" != "/" ]; do
+        if [ -f "$dir/composer.json" ]; then
+            print -r -- "$dir"
+            return 0
+        fi
+        dir="${dir:h}"
+    done
+    return 1
+}
+
+load-herd-php() {
+    local project_root
+    project_root="$(_find_composer_root)" || return
+    
+    local target_php=${_herd_php_cache[$project_root]}
+    if [ -z "$target_php" ]; then
+        target_php="$(herd which-php 2>/dev/null)"
+        [ -z "$target_php" ] && return
+        target_php="$(realpath "$target_php" 2>/dev/null)"
+        [ -z "$target_php" ] && return
+        _herd_php_cache[$project_root]="$target_php"
+    fi
+    
+    local version="${target_php##*/php}"
+    herd use "${version:0:1}.${version:1}" >/dev/null 2>&1
+    echo $Pink"Herd PHP  $BPink${version:0:1}.${version:1}$NC"
+}
+
+add-zsh-hook chpwd load-herd-php
+load-herd-php
+
+# Prefer the project's vendor/bin/duster (the version CI uses) over the
+# global composer install, which can drift out of date and lint differently.
+duster() {
+    local project_root
+    if project_root="$(_find_composer_root)" && [ -x "$project_root/vendor/bin/duster" ]; then
+        "$project_root/vendor/bin/duster" "$@"
+    else
+        command duster "$@"
+    fi
+}
 
 ##### Easily switch between PHP versions just by using the version number as an alias
 ##### Source: https://localheinz.com/articles/2020/05/05/switching-php-versions-when-using-homebrew/
