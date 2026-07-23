@@ -171,6 +171,9 @@ _mfs() {
     php artisan operations
     php artisan db:seed
     php artisan tinker --execute="include('/Users/jakebathman/sites/scripts/iel_mfs.php')"
+  elseif [[ $(basename "$PWD") == "monorepo" ]]; then
+    # For Vaniam monorepo, use composer run fresh which resets tenant databases too
+    composer run fresh
   else
     php artisan migrate:fresh --seed
   fi
