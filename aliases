@@ -161,7 +161,6 @@ _repoinit() {
 
 # alias mfs='php artisan migrate:fresh --seed'
 
-# For IEL, mfs should do a bit more
 alias mfs=_mfs
 _mfs() {
   # If in the nexus directory, add user and roles via tinker
