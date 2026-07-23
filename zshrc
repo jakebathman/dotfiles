@@ -213,13 +213,7 @@ add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
 # When cd-ing into a directory with a composer.json (Laravel repo, close
-# enough), switch Herd's CLI PHP version to match. `herd which-php` is slow
-# (~0.5s, it spawns herd.phar), so the lookup is gated behind a cheap
-# directory walk and cached per project root for the rest of the shell
-# session. `herd use` itself always runs though, no diffing against the
-# currently active version, so the versions below print every time.
-typeset -gA _herd_php_cache
-
+# enough), switch Herd's CLI PHP version to match.
 _find_composer_root() {
     local dir="$PWD"
     while [ "$dir" != "/" ]; do
@@ -235,19 +229,23 @@ _find_composer_root() {
 load-herd-php() {
     local project_root
     project_root="$(_find_composer_root)" || return
-    
-    local target_php=${_herd_php_cache[$project_root]}
-    if [ -z "$target_php" ]; then
-        target_php="$(herd which-php 2>/dev/null)"
-        [ -z "$target_php" ] && return
-        target_php="$(realpath "$target_php" 2>/dev/null)"
-        [ -z "$target_php" ] && return
-        _herd_php_cache[$project_root]="$target_php"
-    fi
-    
+
+    local target_php
+    target_php="$(herd which-php 2>/dev/null)"
+    [ -z "$target_php" ] && return
+    target_php="$(realpath "$target_php" 2>/dev/null)"
+    [ -z "$target_php" ] && return
+
     local version="${target_php##*/php}"
-    herd use "${version:0:1}.${version:1}" >/dev/null 2>&1
-    echo $Pink"Herd PHP  $BPink${version:0:1}.${version:1}$NC"
+    version="${version:0:1}.${version:1}"
+    herd use "$version" >/dev/null 2>&1
+    echo $Pink"Herd PHP  $BPink${version}$NC"
+
+    local required
+    required="$(jq -r '.require.php // empty' "$project_root/composer.json" 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1)"
+    if [ -n "$required" ] && [ "$required" != "$version" ]; then
+        echo $BYellow"Warning: composer.json requires PHP $required, Herd is using $version$NC"
+    fi
 }
 
 add-zsh-hook chpwd load-herd-php
